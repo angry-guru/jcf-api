@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using jcf_api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +28,17 @@ namespace jcf_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            string version = typeof(Startup).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+            services.AddSwaggerDocument(settings =>
+            {
+                settings.Title = "JCF Api";
+                settings.Description = "Jewelry Carbon Footprint calculator Api";
+                settings.Version = version;
+            });
+
+            services.AddTransient<OptionsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +54,12 @@ namespace jcf_api
                 app.UseHsts();
             }
 
-            // app.UseHttpsRedirection();
+            app.UseSwagger(settings =>
+            {
+                settings.Path = "/swagger/v1/swagger.json";
+            })
+            .UseSwaggerUi3();
+
             app.UseMvc();
         }
     }
