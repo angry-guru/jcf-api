@@ -1,7 +1,12 @@
+using jcf_api.Extensions;
+using jcf_api.Types;
+
 namespace jcf_api.Services
 {
     public class CalculationService
     {
+
+
         public decimal CalculateCarbonFootprint(int fligthsNumber, int accomodationDays, int linesheets)
         {
             var iNumPeople = 0;
@@ -55,6 +60,19 @@ namespace jcf_api.Services
             // var fpTotalEmissions = fpCarEmissions + fpFlightEmissions + fpHomeEnergyEmissions + fpDietEmissions;
 
             return 0;
+        }
+
+        private double CalculateAccomodationEmmision(int numberOfDays, TimeOption timeOption)
+        {
+            return 0;
+        }
+
+        private double CalculateFlightEmmision(int numberOfFlights, TimeOption timeOption)
+        {
+            var aveHoursPerFlight = 3.3; // http://link.springer.com/article/10.1007%2Fs10584-014-1169-1
+            var aveTonsCO2PerPersonPerFlightPerHour = 0.25; // http://carbonindependent.org/sources_aviation.htm
+
+            return numberOfFlights * timeOption.GetDays() * aveHoursPerFlight * aveTonsCO2PerPersonPerFlightPerHour;
         }
     }
 }

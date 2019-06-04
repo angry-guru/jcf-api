@@ -39,6 +39,7 @@ namespace jcf_api
             });
 
             services.AddTransient<OptionsService>();
+            // services.AddTransient<IIdServerApiClient, IdServerApiClient>(ctx => new IdServerApiClient(authenticationBaseUri, authenticationClientId, authenticationClientSecret, ctx.GetService<IDeserialize>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +60,14 @@ namespace jcf_api
                 settings.Path = "/swagger/v1/swagger.json";
             })
             .UseSwaggerUi3();
+
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+                builder.AllowAnyOrigin();
+                builder.AllowCredentials();
+            });
 
             app.UseMvc();
         }

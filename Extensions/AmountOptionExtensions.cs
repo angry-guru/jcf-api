@@ -4,12 +4,12 @@ namespace jcf_api.Extensions
 {
     public static class AmountOptionExtensions
     {
-        public static decimal GetValue(this AmountOption option)
+        public static double GetAverageValue(this AmountOption option)
         {
             switch(option)
             {
                 case (AmountOption.LessThan100):
-                    return 66.67M; // calculated empiricaly based on opencard stats of approximate dayly processing equal ~1k samples (15 per 1 page)
+                    return 66.67; // calculated empiricaly based on opencard stats of approximate dayly processing equal ~1k samples (15 per 1 page)
                 case (AmountOption.From100To500):
                     return 368;
                 case (AmountOption.From500To1k):
