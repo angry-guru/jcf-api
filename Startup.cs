@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
+using jcf_api.Clients;
+using jcf_api.Mapping;
 using jcf_api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,8 +20,12 @@ namespace jcf_api
 {
     public class Startup
     {
+        private readonly Uri emissionClientUrl;
+
         public Startup(IConfiguration configuration)
         {
+            emissionClientUrl = configuration.GetSection("ClientUrls").GetValue<Uri>("EmmisionClient");
+
             Configuration = configuration;
         }
 
@@ -39,7 +46,14 @@ namespace jcf_api
             });
 
             services.AddTransient<OptionsService>();
-            // services.AddTransient<IIdServerApiClient, IdServerApiClient>(ctx => new IdServerApiClient(authenticationBaseUri, authenticationClientId, authenticationClientSecret, ctx.GetService<IDeserialize>()));
+            services.AddTransient<EmissionService>();
+            services.AddTransient<EmissionClient>(_ => new EmissionClient(emissionClientUrl));
+
+            var config = new MapperConfiguration(_ => { _.AddProfile<MappingProfile>(); });
+
+            var mapper = config.CreateMapper();
+
+            services.AddTransient(_ => mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

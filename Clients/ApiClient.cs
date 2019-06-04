@@ -7,7 +7,7 @@ namespace jcf_api.Clients
 {
     public abstract class ApiClient
     {
-        private readonly HttpClient client;
+        protected readonly HttpClient client;
 
         protected ApiClient(Uri baseAddressUri)
         {

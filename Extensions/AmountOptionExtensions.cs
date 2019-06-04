@@ -4,6 +4,8 @@ namespace jcf_api.Extensions
 {
     public static class AmountOptionExtensions
     {
+        private const double OnePaperWeightLbs = 0.011;
+
         public static double GetAverageValue(this AmountOption option)
         {
             switch(option)
@@ -40,6 +42,11 @@ namespace jcf_api.Extensions
                 default:
                     return string.Empty;
             }
+        }
+
+        public static double GetLbsWeight(this AmountOption option)
+        {
+            return option.GetAverageValue() * OnePaperWeightLbs;
         }
     } 
 }
