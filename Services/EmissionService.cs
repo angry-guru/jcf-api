@@ -37,9 +37,18 @@ namespace jcf_api.Services
             var totalTons = flightsEmission.Tons + accomodationEmission.Tons + paperEmission.Tons;
             var totalCost = flightsEmission.Cost + accomodationEmission.Cost + paperEmission.Cost;
 
-            flightsEmission.TonsPct = Math.Round(flightsEmission.Tons * 100 / totalTons, 2);
-            accomodationEmission.TonsPct = Math.Round(accomodationEmission.Tons * 100 / totalTons, 2);
-            paperEmission.TonsPct = Math.Round(paperEmission.Tons * 100 / totalTons, 2);
+            if (totalTons != 0)
+            {
+                flightsEmission.TonsPct = Math.Round(flightsEmission.Tons * 100 / totalTons, 2);
+                accomodationEmission.TonsPct = Math.Round(accomodationEmission.Tons * 100 / totalTons, 2);
+                paperEmission.TonsPct = Math.Round(paperEmission.Tons * 100 / totalTons, 2);
+            }
+            else
+            {
+                flightsEmission.TonsPct = 0;
+                accomodationEmission.TonsPct = 0;
+                paperEmission.TonsPct = 0;
+            }
 
             return new EmissionResult
             {
