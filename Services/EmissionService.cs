@@ -22,11 +22,17 @@ namespace jcf_api.Services
 
         public async Task<EmissionResponse> CalculateEmissionResponse(EmissionRequest request, TimeOption timeOption)
         {
-            return new EmissionResponse
+            var emissionResponse = new EmissionResponse
             {
                 NonUser = await CalculateEmission(request.NonUser, timeOption),
-                User = await CalculateEmission(request.User, timeOption)
+                User = await CalculateEmission(request.User, timeOption),
+
             };
+
+            emissionResponse.SavedTrees = (int)((emissionResponse.NonUser.TotalTons - emissionResponse.User.TotalTons) / 0.02);
+            emissionResponse.SavedCost = emissionResponse.NonUser.TotalCost - emissionResponse.User.TotalCost;
+
+            return emissionResponse;
         }
 
         public async Task<EmissionResult> CalculateEmission(CarbonFootprintRequest request, TimeOption timeOption)
@@ -34,15 +40,6 @@ namespace jcf_api.Services
             CarbonFootprintResult flightsEmission = new CarbonFootprintResult();
             CarbonFootprintResult accomodationEmission = new CarbonFootprintResult();
             CarbonFootprintResult paperEmission = new CarbonFootprintResult();
-
-            // Parallel.Invoke(
-            //     () => { flightsEmission = CalculateFlightEmission(request.FlightOption, timeOption).Result; },
-            //     () => { accomodationEmission = CalculateAccomodationEmmision(request.AccomodationOption, timeOption).Result; },
-            //     () => { flightsEmission = CalculatePaperEmmision(request.PaperOption, timeOption).Result; });
-
-            // var flightsEmission = await CalculateFlightEmission(request.FlightOption, timeOption);
-            // var accomodationEmission = await CalculateAccomodationEmmision(request.AccomodationOption, timeOption);
-            // var paperEmission = await CalculatePaperEmmision(request.PaperOption, timeOption);
 
             Task t1 = Task.Run(async () => { flightsEmission = await CalculateFlightEmission(request.FlightOption, timeOption); });
             Task t2 = Task.Run(async () => { accomodationEmission = await CalculateAccomodationEmmision(request.AccomodationOption, timeOption); });
