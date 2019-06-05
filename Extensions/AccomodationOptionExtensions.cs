@@ -10,16 +10,14 @@ namespace jcf_api.Extensions
             {
                 case (AccomodationOption.LessThan3):
                     return 2;
-                case (AccomodationOption.From3To10):
-                    return 7;
-                case (AccomodationOption.From10To50):
-                    return 34;
-                case (AccomodationOption.From50To100):
-                    return 81;
-                case (AccomodationOption.From100To500):
-                    return 340;
-                case (AccomodationOption.MoreThan500):
-                    return 811;
+                case (AccomodationOption.From3To7):
+                    return 5;
+                case (AccomodationOption.From7To30):
+                    return 22;
+                case (AccomodationOption.From30To100):
+                    return 74;
+                case (AccomodationOption.From100To365):
+                    return 244;
                 default:
                     return 0;
             }
@@ -31,16 +29,14 @@ namespace jcf_api.Extensions
             {
                 case (AccomodationOption.LessThan3):
                     return "Less than 3";
-                case (AccomodationOption.From3To10):
-                    return "3-10";
-                case (AccomodationOption.From10To50):
-                    return "10-50";
-                case (AccomodationOption.From50To100):
-                    return "50-100";
-                case (AccomodationOption.From100To500):
-                    return "100-500";
-                case (AccomodationOption.MoreThan500):
-                    return "More than 500";
+                case (AccomodationOption.From3To7):
+                    return "3-7";
+                case (AccomodationOption.From7To30):
+                    return "7-30";
+                case (AccomodationOption.From30To100):
+                    return "30-100";
+                case (AccomodationOption.From100To365):
+                    return "100-365";
                 default:
                     return "Don't use";
             }

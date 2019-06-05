@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using jcf_api.Clients;
@@ -30,12 +31,27 @@ namespace jcf_api.Services
 
         public async Task<EmissionResult> CalculateEmission(CarbonFootprintRequest request, TimeOption timeOption)
         {
-            var flightsEmission = await CalculateFlightEmission(request.FlightOption, timeOption);
-            var accomodationEmission = await CalculateAccomodationEmmision(request.AccomodationOption, timeOption);
-            var paperEmission = await CalculatePaperEmmision(request.PaperOption, timeOption);
+            CarbonFootprintResult flightsEmission = new CarbonFootprintResult();
+            CarbonFootprintResult accomodationEmission = new CarbonFootprintResult();
+            CarbonFootprintResult paperEmission = new CarbonFootprintResult();
 
-            var totalTons = flightsEmission.Tons + accomodationEmission.Tons + paperEmission.Tons;
-            var totalCost = flightsEmission.Cost + accomodationEmission.Cost + paperEmission.Cost;
+            // Parallel.Invoke(
+            //     () => { flightsEmission = CalculateFlightEmission(request.FlightOption, timeOption).Result; },
+            //     () => { accomodationEmission = CalculateAccomodationEmmision(request.AccomodationOption, timeOption).Result; },
+            //     () => { flightsEmission = CalculatePaperEmmision(request.PaperOption, timeOption).Result; });
+
+            // var flightsEmission = await CalculateFlightEmission(request.FlightOption, timeOption);
+            // var accomodationEmission = await CalculateAccomodationEmmision(request.AccomodationOption, timeOption);
+            // var paperEmission = await CalculatePaperEmmision(request.PaperOption, timeOption);
+
+            Task t1 = Task.Run(async () => { flightsEmission = await CalculateFlightEmission(request.FlightOption, timeOption); });
+            Task t2 = Task.Run(async () => { accomodationEmission = await CalculateAccomodationEmmision(request.AccomodationOption, timeOption); });
+            Task t3 = Task.Run(async () => { paperEmission = await CalculatePaperEmmision(request.PaperOption, timeOption); });
+
+            await Task.WhenAll(t1, t2, t3);
+
+            var totalTons = Math.Round(flightsEmission.Tons + accomodationEmission.Tons + paperEmission.Tons, 2);
+            var totalCost = Math.Round(flightsEmission.Cost + accomodationEmission.Cost + paperEmission.Cost, 2);
 
             if (totalTons != 0)
             {

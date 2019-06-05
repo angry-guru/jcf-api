@@ -4,10 +4,9 @@ namespace jcf_api.Types
     {
         NoAccomodation,
         LessThan3,
-        From3To10,
-        From10To50,
-        From50To100,
-        From100To500,
-        MoreThan500
+        From3To7,
+        From7To30,
+        From30To100,
+        From100To365
     }
 }
