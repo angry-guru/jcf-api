@@ -30,9 +30,9 @@ namespace jcf_api.Services
 
         public async Task<EmissionResult> CalculateEmission(CarbonFootprintRequest request, TimeOption timeOption)
         {
-            var flightsEmission = await CalculateFlightEmission(request.NumberOfFlights, timeOption);
-            var accomodationEmission = await CalculateAccomodationEmmision(request.NumberOfDays, timeOption);
-            var paperEmission = await CalculatePaperEmmision(request.AmountOfPaper, timeOption);
+            var flightsEmission = await CalculateFlightEmission(request.FlightOption, timeOption);
+            var accomodationEmission = await CalculateAccomodationEmmision(request.AccomodationOption, timeOption);
+            var paperEmission = await CalculatePaperEmmision(request.PaperOption, timeOption);
 
             var totalTons = flightsEmission.Tons + accomodationEmission.Tons + paperEmission.Tons;
             var totalCost = flightsEmission.Cost + accomodationEmission.Cost + paperEmission.Cost;
@@ -51,27 +51,27 @@ namespace jcf_api.Services
             };
         }
 
-        private async Task<CarbonFootprintResult> CalculatePaperEmmision(AmountOption amountOption, TimeOption timeOption)
+        private async Task<CarbonFootprintResult> CalculatePaperEmmision(PaperOption paperOption, TimeOption timeOption)
         {
-            var yearlyWeight = (amountOption.GetLbsWeight() / timeOption.GetDays()) * TimeOption.year.GetDays();
+            var yearlyWeight = (paperOption.GetLbsWeight() / timeOption.GetDays()) * TimeOption.year.GetDays();
             
             var response = await emissionClient.GetPaperEmission(yearlyWeight);
 
             return mapper.Map<CarbonFootprintResult>(response);
         }
 
-        private async Task<CarbonFootprintResult> CalculateAccomodationEmmision(int numberOfDays, TimeOption timeOption)
+        private async Task<CarbonFootprintResult> CalculateAccomodationEmmision(AccomodationOption accomodationOption, TimeOption timeOption)
         {
-            var yearlyNumberOfDates = ((double) numberOfDays / timeOption.GetDays()) * TimeOption.year.GetDays();
+            var yearlyNumberOfDates = ((double) accomodationOption.GetAverageValue() / timeOption.GetDays()) * TimeOption.year.GetDays();
 
             var response = await emissionClient.GetHotelEmission(yearlyNumberOfDates);
 
             return mapper.Map<CarbonFootprintResult>(response);
         }
 
-        private async Task<CarbonFootprintResult> CalculateFlightEmission(int numberOfFlights, TimeOption timeOption)
+        private async Task<CarbonFootprintResult> CalculateFlightEmission(FlightOption flightOption, TimeOption timeOption)
         {
-            var yearlyNumberOfFlights = ((double) numberOfFlights / timeOption.GetDays()) * TimeOption.year.GetDays();
+            var yearlyNumberOfFlights = ((double) flightOption.GetAverageValue() / timeOption.GetDays()) * TimeOption.year.GetDays();
 
             var response = await emissionClient.GetHotelEmission(yearlyNumberOfFlights);
 

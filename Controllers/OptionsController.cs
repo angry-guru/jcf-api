@@ -18,11 +18,25 @@ namespace jcf_api.Controllers
             this.optionsService = optionsService ?? throw new ArgumentNullException(nameof(optionsService));
         }
 
-        [HttpGet("amount")]
-        [ProducesResponseType(typeof(IEnumerable<KeyValuePair<AmountOption, string>>), 200)]
-        public IActionResult GetAmountOptions()
+        [HttpGet("paper")]
+        [ProducesResponseType(typeof(IEnumerable<KeyValuePair<PaperOption, string>>), 200)]
+        public IActionResult GetPaperOptions()
         {
-            return Ok(optionsService.GetAmountOptions());
+            return Ok(optionsService.GetPaperOptions());
+        }
+
+        [HttpGet("flight")]
+        [ProducesResponseType(typeof(IEnumerable<KeyValuePair<PaperOption, string>>), 200)]
+        public IActionResult GetFlightOptions()
+        {
+            return Ok(optionsService.GetFlightOptions());
+        }
+
+        [HttpGet("accomodation")]
+        [ProducesResponseType(typeof(IEnumerable<KeyValuePair<PaperOption, string>>), 200)]
+        public IActionResult GetAccomodationOptions()
+        {
+            return Ok(optionsService.GetAccomodationOptions());
         }
 
         [HttpGet("time")]

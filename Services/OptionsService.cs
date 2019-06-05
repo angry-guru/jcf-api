@@ -8,9 +8,23 @@ namespace jcf_api.Services
 {
     public class OptionsService
     {
-        public IEnumerable<KeyValuePair<AmountOption, string>> GetAmountOptions()
+        public IEnumerable<KeyValuePair<FlightOption, string>> GetFlightOptions()
         {
-            var enums = Enum.GetValues(typeof(AmountOption)).Cast<AmountOption>();
+            var enums = Enum.GetValues(typeof(FlightOption)).Cast<FlightOption>();
+
+            return enums.Select(_ => KeyValuePair.Create(_, _.GetDescription()));
+        }
+
+        public IEnumerable<KeyValuePair<AccomodationOption, string>> GetAccomodationOptions()
+        {
+            var enums = Enum.GetValues(typeof(AccomodationOption)).Cast<AccomodationOption>();
+
+            return enums.Select(_ => KeyValuePair.Create(_, _.GetDescription()));
+        }
+
+        public IEnumerable<KeyValuePair<PaperOption, string>> GetPaperOptions()
+        {
+            var enums = Enum.GetValues(typeof(PaperOption)).Cast<PaperOption>();
 
             return enums.Select(_ => KeyValuePair.Create(_, _.GetDescription()));
         }
