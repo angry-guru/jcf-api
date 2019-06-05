@@ -34,13 +34,20 @@ namespace jcf_api.Services
             var accomodationEmission = await CalculateAccomodationEmmision(request.NumberOfDays, timeOption);
             var paperEmission = await CalculatePaperEmmision(request.AmountOfPaper, timeOption);
 
+            var totalTons = flightsEmission.Tons + accomodationEmission.Tons + paperEmission.Tons;
+            var totalCost = flightsEmission.Cost + accomodationEmission.Cost + paperEmission.Cost;
+
+            flightsEmission.TonsPct = flightsEmission.Tons / totalTons;
+            accomodationEmission.TonsPct = accomodationEmission.Tons / totalTons;
+            paperEmission.TonsPct = paperEmission.Tons / totalTons;
+
             return new EmissionResult
             {
                 Flights = flightsEmission,
                 Accomodation = accomodationEmission,
                 Paper = paperEmission,
-                TotalTons = flightsEmission.Tons + accomodationEmission.Tons + paperEmission.Tons,
-                TotalCost = flightsEmission.Cost + accomodationEmission.Cost + paperEmission.Cost,
+                TotalTons = totalTons,
+                TotalCost = totalCost
             };
         }
 

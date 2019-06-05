@@ -15,11 +15,11 @@ namespace jcf_api.Services
             return enums.Select(_ => KeyValuePair.Create(_, _.GetDescription()));
         }
 
-        public IEnumerable<KeyValuePair<TimeOption, string>> GetTimeOptions()
+        public IEnumerable<dynamic> GetTimeOptions()
         {
             var enums = Enum.GetValues(typeof(TimeOption)).Cast<TimeOption>();
 
-            return enums.Select(_ => KeyValuePair.Create(_, _.GetDescription()));
+            return enums.Select(_ => new { key = _, value = _.GetDescription(), days = _.GetDays() });
         }
     }
 }

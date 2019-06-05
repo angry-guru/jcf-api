@@ -26,7 +26,7 @@ namespace jcf_api.Controllers
         }
 
         [HttpGet("time")]
-        [ProducesResponseType(typeof(IEnumerable<KeyValuePair<AmountOption, string>>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<dynamic>), 200)]
         public IActionResult GetTimeOptions()
         {
             return Ok(optionsService.GetTimeOptions());

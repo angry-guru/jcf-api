@@ -4,5 +4,6 @@ namespace jcf_api.Types
     {
         public double Tons { get; set; }
         public double Cost { get; set; }
+        public double TonsPct { get; set; }
     }
 }
