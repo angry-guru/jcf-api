@@ -26,11 +26,10 @@ namespace jcf_api.Services
             {
                 NonUser = await CalculateEmission(request.NonUser, timeOption),
                 User = await CalculateEmission(request.User, timeOption),
-
             };
 
             emissionResponse.SavedTrees = (int)((emissionResponse.NonUser.TotalTons - emissionResponse.User.TotalTons) / 0.02);
-            emissionResponse.SavedCost = emissionResponse.NonUser.TotalCost - emissionResponse.User.TotalCost;
+            emissionResponse.SavedCost = Math.Round(emissionResponse.NonUser.TotalCost - emissionResponse.User.TotalCost, 2);
 
             return emissionResponse;
         }
